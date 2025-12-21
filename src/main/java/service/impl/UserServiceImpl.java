@@ -1,11 +1,10 @@
 package com.example.demo.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import com.example.demo.exception.ResourceNotFoundException;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,27 +15,13 @@ public class UserServiceImpl implements UserService {
         this.repo = repo;
     }
 
-    public User create(User user) {
+    @Override
+    public User register(User user) {
         return repo.save(user);
     }
 
-    public User get(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
-    public List<User> getAll() {
-        return repo.findAll();
-    }
-
-    public User update(Long id, User user) {
-        User u = get(id);
-        u.setName(user.getName());
-        u.setEmail(user.getEmail());
-        return repo.save(u);
-    }
-
-    public void delete(Long id) {
-        repo.deleteById(id);
+    @Override
+    public User findByEmail(String email) {
+        return repo.findByEmail(email).orElse(null);
     }
 }
