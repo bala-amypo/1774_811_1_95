@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class BudgetSummary {
@@ -9,12 +10,17 @@ public class BudgetSummary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    private BudgetPlan budgetPlan;
+
     private Double totalIncome;
     private Double totalExpense;
     private String status;
 
-    @OneToOne
-    private BudgetPlan budgetPlan;
+    private LocalDateTime generatedAt;
 
-    // getters & setters
+    @PrePersist
+    void onCreate() {
+        generatedAt = LocalDateTime.now();
+    }
 }

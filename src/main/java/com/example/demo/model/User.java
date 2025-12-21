@@ -3,6 +3,7 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -10,7 +11,15 @@ public class User {
     private Long id;
 
     private String name;
+
+    @Column(unique = true)
     private String email;
+
+    private String password;
+
+    private String role = "USER";
+
+    public User() {}
 
     // getters & setters
 }

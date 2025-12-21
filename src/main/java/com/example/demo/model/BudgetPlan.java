@@ -9,13 +9,14 @@ public class BudgetPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer month;
-    private Integer year;
-    private Double incomeTarget;
-    private Double expenseLimit;
-
     @ManyToOne
     private User user;
 
-    // getters & setters
+    private Integer month;
+    private Integer year;
+
+    private Double incomeTarget;
+    private Double expenseLimit;
+
+    public BudgetPlan() {}
 }

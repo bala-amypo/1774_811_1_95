@@ -9,8 +9,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
-    private String type;
 
-    // getters & setters
+    private String type; // INCOME / EXPENSE
+
+    public Category() {}
 }

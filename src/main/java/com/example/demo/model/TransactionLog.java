@@ -10,14 +10,14 @@ public class TransactionLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double amount;
-    private LocalDate date;
-
     @ManyToOne
     private User user;
 
     @ManyToOne
     private Category category;
 
-    // getters & setters
+    private Double amount;
+    private LocalDate date;
+
+    public TransactionLog() {}
 }
