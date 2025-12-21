@@ -1,14 +1,16 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+
 @Entity
 public class User {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-
-    @Column(unique = true)
     private String email;
 
-    private String password;
-
-    private String role = "USER";
+    // getters & setters
 }

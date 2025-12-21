@@ -1,6 +1,13 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+
 @Entity
 public class TransactionLog {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Double amount;
@@ -11,4 +18,6 @@ public class TransactionLog {
 
     @ManyToOne
     private Category category;
+
+    // getters & setters
 }

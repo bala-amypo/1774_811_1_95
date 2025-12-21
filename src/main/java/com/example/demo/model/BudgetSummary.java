@@ -1,18 +1,20 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+
 @Entity
 public class BudgetSummary {
-    @Id @GeneratedValue
-    private Long id;
 
-    @OneToOne
-    private BudgetPlan budgetPlan;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private Double totalIncome;
     private Double totalExpense;
     private String status;
-    private LocalDateTime generatedAt;
 
-    @PrePersist
-    public void onCreate() {
-        generatedAt = LocalDateTime.now();
-    }
+    @OneToOne
+    private BudgetPlan budgetPlan;
+
+    // getters & setters
 }
