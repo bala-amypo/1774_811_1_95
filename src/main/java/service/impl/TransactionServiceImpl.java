@@ -1,17 +1,19 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.example.demo.model.TransactionLog;
 import com.example.demo.repository.TransactionLogRepository;
-import com.example.demo.service.TransactionLogService;
+import com.example.demo.service.TransactionService;
 
 @Service
-public class TransactionLogServiceImpl implements TransactionLogService {
+public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionLogRepository repository;
 
-    public TransactionLogServiceImpl(TransactionLogRepository repository) {
+    public TransactionServiceImpl(TransactionLogRepository repository) {
         this.repository = repository;
     }
 
