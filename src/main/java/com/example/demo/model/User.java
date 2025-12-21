@@ -1,12 +1,6 @@
-package com.example.demo.model;
-
-import jakarta.persistence.*;
-
 @Entity
 public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     private String name;
@@ -16,5 +10,5 @@ public class User {
 
     private String password;
 
-    
+    private String role = "USER";
 }
