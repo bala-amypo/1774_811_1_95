@@ -3,8 +3,8 @@ package com.example.demo.service.impl;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import com.example.demo.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -20,8 +20,9 @@ public class UserServiceImpl implements UserService {
         return repo.save(user);
     }
 
-    public User getById(Long id) {
-        return repo.findById(id).orElseThrow();
+    public User get(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     public List<User> getAll() {
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User update(Long id, User user) {
-        User u = getById(id);
+        User u = get(id);
         u.setName(user.getName());
         u.setEmail(user.getEmail());
         return repo.save(u);
