@@ -1,33 +1,39 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-public class BudgetPlan {
+public class BudgetSummary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
-    private Integer month;
-    private Integer year;
-    private Double incomeTarget;
-    private Double expenseLimit;
+    private Long budgetPlanId;
+    private Double totalIncome;
+    private Double totalExpense;
+    private String status;
 
-    public BudgetPlan() {}
+    private LocalDateTime generatedAt;
+
+    @PrePersist
+    public void onCreate() {
+        generatedAt = LocalDateTime.now();
+    }
+
+    public BudgetSummary() {}
 
     public Long getId() { return id; }
-    public Long getUserId() { return userId; }
-    public Integer getMonth() { return month; }
-    public Integer getYear() { return year; }
-    public Double getIncomeTarget() { return incomeTarget; }
-    public Double getExpenseLimit() { return expenseLimit; }
+    public Long getBudgetPlanId() { return budgetPlanId; }
+    public Double getTotalIncome() { return totalIncome; }
+    public Double getTotalExpense() { return totalExpense; }
+    public String getStatus() { return status; }
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
 
     public void setId(Long id) { this.id = id; }
-    public void setUserId(Long userId) { this.userId = userId; }
-    public void setMonth(Integer month) { this.month = month; }
-    public void setYear(Integer year) { this.year = year; }
-    public void setIncomeTarget(Double incomeTarget) { this.incomeTarget = incomeTarget; }
-    public void setExpenseLimit(Double expenseLimit) { this.expenseLimit = expenseLimit; }
+    public void setBudgetPlanId(Long budgetPlanId) { this.budgetPlanId = budgetPlanId; }
+    public void setTotalIncome(Double totalIncome) { this.totalIncome = totalIncome; }
+    public void setTotalExpense(Double totalExpense) { this.totalExpense = totalExpense; }
+    public void setStatus(String status) { this.status = status; }
 }
