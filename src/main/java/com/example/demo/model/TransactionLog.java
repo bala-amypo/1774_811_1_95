@@ -1,15 +1,9 @@
 package com.example.demo.model;
 
-import java.time.LocalDate;
+import com.example.demo.exception.BadRequestException;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "transaction_logs")
@@ -19,63 +13,54 @@ public class TransactionLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double amount;
-
-    private LocalDate transactionDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @ManyToOne
     private Category category;
+
+    private Double amount;
+    private String description;
+    private LocalDate transactionDate;
 
     public TransactionLog() {}
 
-    public void validate() {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
-        }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public TransactionLog(Long id, User user, Category category,
+                          Double amount, String description,
+                          LocalDate transactionDate) {
         this.id = id;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
+        this.user = user;
+        this.category = category;
         this.amount = amount;
-    }
-
-    public LocalDate getTransactionDate() {
-        return transactionDate;
-    }
-
-    public void setTransactionDate(LocalDate transactionDate) {
+        this.description = description;
         this.transactionDate = transactionDate;
     }
 
-    public User getUser() {
-        return user;
+    public void validate() {
+        if (amount == null || amount <= 0) {
+            throw new BadRequestException("Amount must be positive");
+        }
+        if (transactionDate.isAfter(LocalDate.now())) {
+            throw new BadRequestException("Future date not allowed");
+        }
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Category getCategory() {
-        return category;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
+
+    public Double getAmount() { return amount; }
+    public void setAmount(Double amount) { this.amount = amount; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public LocalDate getTransactionDate() { return transactionDate; }
+    public void setTransactionDate(LocalDate transactionDate) { this.transactionDate = transactionDate; }
 }

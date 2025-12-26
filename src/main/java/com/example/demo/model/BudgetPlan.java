@@ -1,38 +1,29 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.example.demo.exception.BadRequestException;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "budget_plan")
+@Table(name = "budget_plan",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"user_id","month","year"}))
 public class BudgetPlan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int month;
-
-    private int year;
-
-    private double incomeLimit;
-
-    private double expenseLimit;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
     private User user;
+
+    private Integer month;
+    private Integer year;
+    private Double incomeLimit;
+    private Double expenseLimit;
 
     public BudgetPlan() {}
 
-    public BudgetPlan(Long id, User user, int month, int year, double incomeLimit, double expenseLimit) {
+    public BudgetPlan(Long id, User user, Integer month, Integer year,
+                      Double incomeLimit, Double expenseLimit) {
         this.id = id;
         this.user = user;
         this.month = month;
@@ -43,58 +34,26 @@ public class BudgetPlan {
 
     public void validate() {
         if (month < 1 || month > 12) {
-            throw new IllegalArgumentException("Invalid month");
-        }
-        if (year < 2000) {
-            throw new IllegalArgumentException("Invalid year");
+            throw new BadRequestException("Invalid month");
         }
     }
 
-    public Long getId() {
-        return id;
-    }
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public int getMonth() {
-        return month;
-    }
+    public Integer getMonth() { return month; }
+    public void setMonth(Integer month) { this.month = month; }
 
-    public void setMonth(int month) {
-        this.month = month;
-    }
+    public Integer getYear() { return year; }
+    public void setYear(Integer year) { this.year = year; }
 
-    public int getYear() {
-        return year;
-    }
+    public Double getIncomeLimit() { return incomeLimit; }
+    public void setIncomeLimit(Double incomeLimit) { this.incomeLimit = incomeLimit; }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public double getIncomeLimit() {
-        return incomeLimit;
-    }
-
-    public void setIncomeLimit(double incomeLimit) {
-        this.incomeLimit = incomeLimit;
-    }
-
-    public double getExpenseLimit() {
-        return expenseLimit;
-    }
-
-    public void setExpenseLimit(double expenseLimit) {
-        this.expenseLimit = expenseLimit;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public Double getExpenseLimit() { return expenseLimit; }
+    public void setExpenseLimit(Double expenseLimit) { this.expenseLimit = expenseLimit; }
 }
