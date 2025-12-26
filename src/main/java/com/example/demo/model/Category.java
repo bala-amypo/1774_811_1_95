@@ -1,9 +1,17 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import com.example.demo.exception.BadRequestException;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Category {
+
+    public static final String INCOME = "INCOME";
+    public static final String EXPENSE = "EXPENSE";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,9 +20,21 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    private String type; // INCOME / EXPENSE
+    private String type;
 
     public Category() {}
+
+    public Category(Long id, String name, String type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
+    public void validateType() {
+        if (!INCOME.equals(type) && !EXPENSE.equals(type)) {
+            throw new BadRequestException("Invalid category type");
+        }
+    }
 
     public Long getId() { return id; }
     public String getName() { return name; }
