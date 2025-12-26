@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 import java.time.LocalDate;
-
+@Entity
 public class TransactionLog {
 
     private Long id;
