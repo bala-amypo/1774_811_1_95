@@ -5,17 +5,15 @@ public class Category {
     public static final String TYPE_INCOME = "INCOME";
     public static final String TYPE_EXPENSE = "EXPENSE";
 
+    // SERVICE EXPECTS THESE
+    public static final String INCOME = "INCOME";
+    public static final String EXPENSE = "EXPENSE";
+
     private Long id;
     private String name;
     private String type;
 
     public Category() {}
-
-    public Category(Long id, String name, String type) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -25,4 +23,11 @@ public class Category {
 
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
+
+    // REQUIRED BY SERVICE
+    public void validateType() {
+        if (!INCOME.equals(type) && !EXPENSE.equals(type)) {
+            throw new IllegalArgumentException("Invalid category type");
+        }
+    }
 }
