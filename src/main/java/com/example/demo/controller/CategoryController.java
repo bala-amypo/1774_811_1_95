@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Category;
-import com.example.demo.repository.CategoryRepository;
+import com.example.demo.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,19 +10,19 @@ import java.util.List;
 @RequestMapping("/categories")
 public class CategoryController {
 
-    private final CategoryRepository repo;
+    private final CategoryService service;
 
-    public CategoryController(CategoryRepository repo) {
-        this.repo = repo;
+    public CategoryController(CategoryService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public Category create(@RequestBody Category category) {
-        return repo.save(category);
+    public Category create(@RequestBody Category c) {
+        return service.addCategory(c);
     }
 
     @GetMapping
-    public List<Category> getAll() {
-        return repo.findAll();
+    public List<Category> list() {
+        return service.getAllCategories();
     }
 }
