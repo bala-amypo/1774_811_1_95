@@ -1,42 +1,28 @@
 package com.example.demo.model;
 
-import com.example.demo.exception.BadRequestException;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-
-@Entity
 public class BudgetPlan {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
     private User user;
-
-    private Integer month;
-    private Integer year;
-    private Double incomeTarget;
-    private Double expenseLimit;
+    private int month;
+    private int year;
+    private double totalIncome;
+    private double totalExpense;
 
     public BudgetPlan() {}
 
-    public void validate() {
-        if (month < 1 || month > 12) {
-            throw new BadRequestException("Invalid month");
-        }
-        if (incomeTarget < 0 || expenseLimit < 0) {
-            throw new BadRequestException("Invalid values");
-        }
+    public BudgetPlan(Long id, User user, int month, int year,
+                      double totalIncome, double totalExpense) {
+        this.id = id;
+        this.user = user;
+        this.month = month;
+        this.year = year;
+        this.totalIncome = totalIncome;
+        this.totalExpense = totalExpense;
     }
 
-    public Integer getMonth() { return month; }
-    public Integer getYear() { return year; }
-    public Double getExpenseLimit() { return expenseLimit; }
-    public User getUser() { return user; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setUser(User user) { this.user = user; }
+    public User getUser() { return user; }
 }
