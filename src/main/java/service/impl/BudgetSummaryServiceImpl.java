@@ -1,75 +1,60 @@
 package com.example.demo.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.demo.model.BudgetPlan;
 import com.example.demo.model.BudgetSummary;
 import com.example.demo.model.Category;
 import com.example.demo.model.TransactionLog;
-import com.example.demo.repository.BudgetPlanRepository;
 import com.example.demo.repository.BudgetSummaryRepository;
-import com.example.demo.repository.TransactionLogRepository;
+import com.example.demo.repository.TransactionRepository;
 import com.example.demo.service.BudgetSummaryService;
-import java.time.LocalDate;
-import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class BudgetSummaryServiceImpl implements BudgetSummaryService {
 
-    private final BudgetSummaryRepository budgetSummaryRepository;
-    private final BudgetPlanRepository budgetPlanRepository;
-    private final TransactionLogRepository transactionLogRepository;
+    private final TransactionRepository transactionRepository;
+    private final BudgetSummaryRepository summaryRepository;
 
-    public BudgetSummaryServiceImpl(BudgetSummaryRepository budgetSummaryRepository,
-                                    BudgetPlanRepository budgetPlanRepository,
-                                    TransactionLogRepository transactionLogRepository) {
-        this.budgetSummaryRepository = budgetSummaryRepository;
-        this.budgetPlanRepository = budgetPlanRepository;
-        this.transactionLogRepository = transactionLogRepository;
+    public BudgetSummaryServiceImpl(TransactionRepository transactionRepository,
+                                    BudgetSummaryRepository summaryRepository) {
+        this.transactionRepository = transactionRepository;
+        this.summaryRepository = summaryRepository;
     }
 
     @Override
-    public BudgetSummary generateSummary(Long budgetPlanId) {
-
-        BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId)
-                .orElseThrow();
-
-        LocalDate start = LocalDate.of(plan.getYear(), plan.getMonth(), 1);
-        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+    public BudgetSummary generateSummary(BudgetPlan plan) {
 
         List<TransactionLog> logs =
-                transactionLogRepository.findByUserAndTransactionDateBetween(
-                        plan.getUser(), start, end);
+                transactionRepository.findByUser(plan.getUser());
 
-        double income = logs.stream()
-                .filter(t -> Category.INCOME.equals(t.getCategory().getType()))
-                .mapToDouble(TransactionLog::getAmount)
-                .sum();
+        double totalIncome = 0;
+        double totalExpense = 0;
 
-        double expense = logs.stream()
-                .filter(t -> Category.EXPENSE.equals(t.getCategory().getType()))
-                .mapToDouble(TransactionLog::getAmount)
-                .sum();
+        for (TransactionLog log : logs) {
+
+            if (Category.TYPE_INCOME.equals(log.getCategory().getType())) {
+                totalIncome += log.getAmount();
+            }
+
+            if (Category.TYPE_EXPENSE.equals(log.getCategory().getType())) {
+                totalExpense += log.getAmount();
+            }
+        }
 
         BudgetSummary summary = new BudgetSummary();
         summary.setBudgetPlan(plan);
-        summary.setTotalIncome(income);
-        summary.setTotalExpense(expense);
-        summary.setStatus(
-                expense <= plan.getExpenseLimit()
-                        ? BudgetSummary.UNDER_LIMIT
-                        : BudgetSummary.OVER_LIMIT
-        );
+        summary.setTotalIncome(totalIncome);
+        summary.setTotalExpense(totalExpense);
 
-        return budgetSummaryRepository.save(summary);
-    }
+        if (totalExpense <= plan.getExpenseLimit()) {
+            summary.setStatus(BudgetSummary.STATUS_UNDER_LIMIT);
+        } else {
+            summary.setStatus(BudgetSummary.STATUS_OVER_LIMIT);
+        }
 
-    @Override
-    public BudgetSummary getSummary(Long budgetPlanId) {
-
-        BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId)
-                .orElseThrow();
-
-        return budgetSummaryRepository.findByBudgetPlan(plan)
-                .orElseThrow();
+        return summaryRepository.save(summary);
     }
 }
