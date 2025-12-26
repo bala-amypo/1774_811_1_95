@@ -2,16 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.model.TransactionLog;
 import com.example.demo.service.TransactionService;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/api/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -21,15 +19,15 @@ public class TransactionController {
     }
 
     @PostMapping("/{userId}")
-    public TransactionLog addTransaction(
+    public ResponseEntity<TransactionLog> add(
             @PathVariable Long userId,
-            @RequestBody TransactionLog transactionLog) {
-
-        return transactionService.addTransaction(userId, transactionLog);
+            @RequestBody TransactionLog log) {
+        return ResponseEntity.ok(transactionService.addTransaction(userId, log));
     }
 
-    @GetMapping("/user/{userId}")
-    public List<TransactionLog> getUserTransactions(@PathVariable Long userId) {
-        return transactionService.getUserTransactions(userId);
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<TransactionLog>> getUserTransactions(
+            @PathVariable Long userId) {
+        return ResponseEntity.ok(transactionService.getUserTransactions(userId));
     }
 }

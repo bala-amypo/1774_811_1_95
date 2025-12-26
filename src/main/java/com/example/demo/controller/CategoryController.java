@@ -2,15 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Category;
 import com.example.demo.service.CategoryService;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -20,12 +19,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category addCategory(@RequestBody Category category) {
-        return categoryService.addCategory(category);
+    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+        return ResponseEntity.ok(categoryService.addCategory(category));
     }
 
     @GetMapping
-    public List<Category> getAllCategories() {
-        return categoryService.getAllCategories();
+    public ResponseEntity<List<Category>> getAll() {
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 }

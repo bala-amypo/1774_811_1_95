@@ -2,14 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.model.BudgetSummary;
 import com.example.demo.service.BudgetSummaryService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/summary")
+@RequestMapping("/api/budget-summaries")
 public class BudgetSummaryController {
 
     private final BudgetSummaryService budgetSummaryService;
@@ -18,17 +16,11 @@ public class BudgetSummaryController {
         this.budgetSummaryService = budgetSummaryService;
     }
 
-    @PostMapping("/generate/{budgetPlanId}")
-    public BudgetSummary generateSummary(
-            @PathVariable Long budgetPlanId) {
-
-        return budgetSummaryService.generateSummary(budgetPlanId);
-    }
-
     @GetMapping("/{budgetPlanId}")
-    public BudgetSummary getSummary(
+    public ResponseEntity<BudgetSummary> getSummary(
             @PathVariable Long budgetPlanId) {
-
-        return budgetSummaryService.getSummary(budgetPlanId);
+        return ResponseEntity.ok(
+                budgetSummaryService.generateSummary(budgetPlanId)
+        );
     }
 }
