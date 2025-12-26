@@ -10,8 +10,6 @@ public class TransactionLog {
     private User user;
     private Category category;
 
-    public TransactionLog() {}
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -27,7 +25,15 @@ public class TransactionLog {
     public void setUser(User user) { this.user = user; }
 
     public Category getCategory() { return category; }
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(Category category) { this.category = category; }
+
+    // REQUIRED BY SERVICE
+    public void validate() {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        if (transactionDate == null) {
+            throw new IllegalArgumentException("Date required");
+        }
     }
 }
