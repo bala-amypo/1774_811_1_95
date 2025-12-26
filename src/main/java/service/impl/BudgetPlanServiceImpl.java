@@ -1,14 +1,15 @@
 package com.example.demo.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.BudgetPlan;
 import com.example.demo.model.User;
 import com.example.demo.repository.BudgetPlanRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BudgetPlanService;
-import org.springframework.stereotype.Service;
 
-@Service   // 🔥 THIS WAS MISSING
+@Service
 public class BudgetPlanServiceImpl implements BudgetPlanService {
 
     private final BudgetPlanRepository budgetPlanRepository;
@@ -26,8 +27,8 @@ public class BudgetPlanServiceImpl implements BudgetPlanService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BadRequestException("User not found"));
 
-        plan.setUser(user);
         plan.validate();
+        plan.setUser(user);
 
         if (budgetPlanRepository
                 .findByUserAndMonthAndYear(user, plan.getMonth(), plan.getYear())
@@ -36,16 +37,5 @@ public class BudgetPlanServiceImpl implements BudgetPlanService {
         }
 
         return budgetPlanRepository.save(plan);
-    }
-
-    @Override
-    public BudgetPlan getBudgetPlan(Long userId, Integer month, Integer year) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BadRequestException("User not found"));
-
-        return budgetPlanRepository
-                .findByUserAndMonthAndYear(user, month, year)
-                .orElseThrow(() -> new BadRequestException("Budget plan not found"));
     }
 }
