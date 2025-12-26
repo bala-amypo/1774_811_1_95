@@ -126,6 +126,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!-- Spring Test (REQUIRED for MockHttpServletRequest / Response) -->
+       <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+      </dependency>
+
 
 
     </dependencies>
