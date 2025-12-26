@@ -19,6 +19,7 @@ public class BudgetSummaryController {
     @GetMapping("/{budgetPlanId}")
     public ResponseEntity<BudgetSummary> getSummary(
             @PathVariable Long budgetPlanId) {
+
         return ResponseEntity.ok(
                 budgetSummaryService.generateSummary(budgetPlanId)
         );
